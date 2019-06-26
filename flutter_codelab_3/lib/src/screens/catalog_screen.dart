@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sample_state_management/src/model/data.dart';
 import 'package:sample_state_management/src/screens/cart_screen.dart';
 
-class CatalogScreen extends StatelessWidget {
+class CatalogScreen extends StatefulWidget {
+  @override
+  _CatalogScreenState createState() => _CatalogScreenState();
+}
+
+class _CatalogScreenState extends State<CatalogScreen> {
+  final List<Item> cartItems = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +18,7 @@ class CatalogScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              final page = CartScreen();
+              final page = CartScreen(cartItems: cartItems);
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => page),
               );
@@ -30,6 +37,16 @@ class CatalogScreen extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (_, index) => CatalogItem(
           item: items[index],
+          wasAdded: cartItems.contains(
+            items[index],
+          ),
+          onTap: () {
+            setState(() {
+              cartItems.add(
+                items[index],
+              );
+            });
+          },
         ),
         separatorBuilder: (_, index) => Divider(),
       ),
@@ -39,8 +56,14 @@ class CatalogScreen extends StatelessWidget {
 
 class CatalogItem extends StatelessWidget {
   final Item item;
-
-  const CatalogItem({Key key, this.item}) : super(key: key);
+  final VoidCallback onTap;
+  final bool wasAdded;
+  const CatalogItem({
+    Key key,
+    this.item,
+    this.onTap,
+    this.wasAdded,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +76,10 @@ class CatalogItem extends StatelessWidget {
       ),
       title: Text(item.name),
       subtitle: Text("\$${item.price}"),
-      trailing: item.id.isEven
+      trailing: !wasAdded
           ? OutlineButton(
               child: Text("ADD"),
-              onPressed: () => null,
+              onPressed: onTap,
             )
           : Padding(
               padding: EdgeInsets.only(right: 30),

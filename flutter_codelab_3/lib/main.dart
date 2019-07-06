@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sample_state_management/src/model/cart_model.dart';
 import 'src/screens/login_screen.dart';
 
 void main() => runApp(MyApp());
@@ -6,18 +8,21 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light().copyWith(
-        accentColor: Colors.black,
-        primaryColor: Colors.yellow,
-        buttonTheme: ButtonThemeData(
-          buttonColor: Colors.yellow,
+    return ChangeNotifierProvider(
+      builder: (_) => CartModel(),
+      child: MaterialApp(
+        theme: ThemeData.light().copyWith(
+          accentColor: Colors.black,
+          primaryColor: Colors.yellow,
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.yellow,
+          ),
+          primaryIconTheme: IconThemeData(
+            color: Colors.black,
+          ),
         ),
-        primaryIconTheme: IconThemeData(
-          color: Colors.black,
-        ),
+        home: LoginScreen(),
       ),
-      home: LoginScreen(),
     );
   }
 }

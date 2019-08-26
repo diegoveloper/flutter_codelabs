@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sample_state_management/src/model/cart_model.dart';
 import 'package:sample_state_management/src/model/data.dart';
-import 'package:sample_state_management/src/screens/cart_screen.dart';
-import 'package:sample_state_management/src/screens/cart_total.dart';
+import 'package:sample_state_management/src/screens/catalog_action_buttons.dart';
 
-class CatalogScreen extends StatelessWidget {
+class CatalogScreen extends StatefulWidget {
+  @override
+  _CatalogScreenState createState() => _CatalogScreenState();
+}
+
+class _CatalogScreenState extends State<CatalogScreen> {
+  final List<Item> cartItems = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              final page = CartScreen();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => page),
-              );
-            },
+          CatalogActionButtons(
+            cartItems: cartItems,
           ),
         ],
         title: Text(
@@ -29,33 +27,22 @@ class CatalogScreen extends StatelessWidget {
               ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 4,
-            child: Consumer<CartModel>(
-              builder: (_, model, __) {
-                final cartItems = model.cartItems;
-                return ListView.separated(
-                  itemCount: items.length,
-                  itemBuilder: (_, index) => CatalogItem(
-                    item: items[index],
-                    wasAdded: cartItems.contains(
-                      items[index],
-                    ),
-                    onTap: () {
-                      model.addItemToCart(items[index]);
-                    },
-                  ),
-                  separatorBuilder: (_, index) => Divider(),
-                );
-              },
-            ),
+      body: ListView.separated(
+        itemCount: items.length,
+        itemBuilder: (_, index) => CatalogItem(
+          item: items[index],
+          wasAdded: cartItems.contains(
+            items[index],
           ),
-          Expanded(
-            child: CartTotal(),
-          )
-        ],
+          onTap: () {
+            setState(() {
+              cartItems.add(
+                items[index],
+              );
+            });
+          },
+        ),
+        separatorBuilder: (_, index) => Divider(),
       ),
     );
   }

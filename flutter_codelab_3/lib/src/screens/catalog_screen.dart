@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sample_state_management/src/model/cart_model.dart';
 import 'package:sample_state_management/src/model/data.dart';
 import 'package:sample_state_management/src/screens/catalog_action_buttons.dart';
 
-class CatalogScreen extends StatefulWidget {
-  @override
-  _CatalogScreenState createState() => _CatalogScreenState();
-}
-
-class _CatalogScreenState extends State<CatalogScreen> {
-  final List<Item> cartItems = [];
-
+class CatalogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          CatalogActionButtons(
-            cartItems: cartItems,
-          ),
+          CatalogActionButtons(),
         ],
         title: Text(
           "Catalog",
@@ -27,22 +20,22 @@ class _CatalogScreenState extends State<CatalogScreen> {
               ),
         ),
       ),
-      body: ListView.separated(
-        itemCount: items.length,
-        itemBuilder: (_, index) => CatalogItem(
-          item: items[index],
-          wasAdded: cartItems.contains(
-            items[index],
-          ),
-          onTap: () {
-            setState(() {
-              cartItems.add(
+      body: Consumer<CartModel>(
+        builder: (context, model, child) {
+          return ListView.separated(
+            itemCount: items.length,
+            itemBuilder: (_, index) => CatalogItem(
+              item: items[index],
+              wasAdded: model.cartItems.contains(
                 items[index],
-              );
-            });
-          },
-        ),
-        separatorBuilder: (_, index) => Divider(),
+              ),
+              onTap: () {
+                model.addItem(items[index]);
+              },
+            ),
+            separatorBuilder: (_, index) => Divider(),
+          );
+        },
       ),
     );
   }

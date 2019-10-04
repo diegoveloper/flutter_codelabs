@@ -1,13 +1,8 @@
-# Flutter CodeLab 2
-## Stateful & AsyncWidgets
+# Flutter CodeLab 4
+## Best Practices with Flutter and Firestore
 
 **Description:** 
-Samples of
-
-- StatefulWidget
-- FutureBuilder
-- StreamBuilder
-
+Some samples showing the best practices using Firestore
 
 **Contact me**
 

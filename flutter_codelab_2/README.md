@@ -13,6 +13,7 @@ Samples of
 
 [Twitter](https://twitter.com/diegoveloper)
 [Medium](https://medium.com/@diegoveloper/](https://medium.com/@diegoveloper/))
+[Youtube(Spanish)](https://www.youtube.com/c/TheDartSide)
 
 Flutter Peru: 
    - Twitter: [@FlutterPeru](https://twitter.com/FlutterPeru)

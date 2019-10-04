@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sample_state_management/src/model/cart_model.dart';
+import 'package:sample_state_management/src/model/data.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({
-    Key key,
-  }) : super(key: key);
+  final List<Item> cartItems;
+
+  const CartScreen({Key key, this.cartItems}) : super(key: key);
+
+  double get cartTotal => cartItems.isNotEmpty
+      ? cartItems.map((val) => val.price).reduce((val1, val2) => val1 + val2)
+      : 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,44 +22,40 @@ class CartScreen extends StatelessWidget {
               ),
         ),
       ),
-      body: Consumer<CartModel>(
-        builder: (context, model, child) {
-          return Column(
-            children: [
-              Expanded(
-                flex: 3,
-                child: ListView(
-                  padding: EdgeInsets.all(15),
-                  children: [
-                    for (var item in model.cartItems)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '* ${item.name}',
-                              style: Theme.of(context).textTheme.title,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              '${item.price}',
-                              style: Theme.of(context).textTheme.title,
-                            ),
-                          ),
-                        ],
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: ListView(
+              padding: EdgeInsets.all(15),
+              children: [
+                for (var item in cartItems)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '* ${item.name}',
+                          style: Theme.of(context).textTheme.title,
+                        ),
                       ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  "Total : ${model.cartTotal}",
-                  style: Theme.of(context).textTheme.display3,
-                ),
-              ),
-            ],
-          );
-        },
+                      Expanded(
+                        child: Text(
+                          '${item.price}',
+                          style: Theme.of(context).textTheme.title,
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Text(
+              "Total : $cartTotal",
+              style: Theme.of(context).textTheme.display3,
+            ),
+          ),
+        ],
       ),
     );
   }

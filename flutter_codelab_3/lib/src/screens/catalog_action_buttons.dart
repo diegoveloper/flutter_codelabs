@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sample_state_management/src/model/cart_model.dart';
+import 'package:sample_state_management/src/model/data.dart';
+
 import 'cart_screen.dart';
 
 class CatalogActionButtons extends StatelessWidget {
-  const CatalogActionButtons({
-    Key key,
-  }) : super(key: key);
+  final List<Item> cartItems;
+
+  const CatalogActionButtons({Key key, this.cartItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<CartModel>(context);
-    final cartItems = provider.cartItems;
     return Row(
       children: [
         cartItems.isNotEmpty
             ? IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  provider.deleteAll();
+                  //TODO: Implement this feature on stage - GOOD LUCK BRO ^_^
                 },
               )
             : const SizedBox.shrink(),
@@ -27,7 +25,7 @@ class CatalogActionButtons extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
-                final page = CartScreen();
+                final page = CartScreen(cartItems: cartItems);
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => page),
                 );

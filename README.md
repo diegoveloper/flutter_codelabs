@@ -8,6 +8,7 @@
 - CodeLab 4 : Best Practices with Flutter & Firestore
 
 **Note**
+
 Some CodeLabs have the finished version of the code in the `finished` branch
 
 **Questions**

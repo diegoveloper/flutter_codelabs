@@ -17,12 +17,8 @@ class _Sample3State extends State<Sample3> {
     if (controllerName.text.trim().isEmpty) return;
     FocusScope.of(context).requestFocus(FocusNode());
 
-    MyService().addPersonOffline(Person(controllerName.text), (onResult) {
-      if (mounted) {
-        setState(() {
-          result = onResult;
-        });
-      }
+    setState(() {
+      result = MyService().addPersonOffline(Person(controllerName.text));
     });
 
     controllerName.clear();

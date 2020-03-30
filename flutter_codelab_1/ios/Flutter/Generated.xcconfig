@@ -1,7 +1,7 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/diegoveloper/Development/SDKS/flutter
-FLUTTER_APPLICATION_PATH=/Users/diegoveloper/Development/git-diegoveloper/flutter_codelab_1
-FLUTTER_TARGET=/Users/diegoveloper/Development/git-diegoveloper/flutter_codelab_1/lib/main.dart
+FLUTTER_APPLICATION_PATH=/Users/diegoveloper/Development/git-diegoveloper/flutter_codelabs/flutter_codelab_1
+FLUTTER_TARGET=/Users/diegoveloper/Development/git-diegoveloper/flutter_codelabs/flutter_codelab_1/lib/main.dart
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
 FLUTTER_FRAMEWORK_DIR=/Users/diegoveloper/Development/SDKS/flutter/bin/cache/artifacts/engine/ios

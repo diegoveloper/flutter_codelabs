@@ -5,6 +5,7 @@ import 'package:devfestlima2018/item_detail.dart';
 import 'package:devfestlima2018/lugar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -17,13 +18,15 @@ class _HomePageState extends State<HomePage> {
   List listaJSON = List();
   List<Lugar> listaLugares = List();
 //factory Lugar.fromJSON(Map<String, dynamic> json) {
-  _cargarDatos() async {
+  void _cargarDatos() async {
+    /*
     final response = await http
-        .get("http://www.json-generator.com/api/json/get/cfMiozZbQO?indent=2");
-    listaJSON = json.decode(response.body);
-
+        .get("http://www.json-generator.com/api/json/get/caTFRWoMSW?indent=2")
+    final data = response.body;
+        ;*/
+    final data = await rootBundle.loadString('assets/data.json');
+    listaJSON = json.decode(data);
     listaLugares = listaJSON.map((val) => Lugar.fromJSON(val)).toList();
-
     setState(() {});
   }
 

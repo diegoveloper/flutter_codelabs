@@ -12,13 +12,12 @@ class MyService {
     return docRef.documentID;
   }
 
-  Future<void> addPersonOffline(
+  String addPersonOffline(
     Person person,
-    ValueChanged<String> onUpdate,
-  ) async {
+  ) {
     final docRef = Firestore.instance.collection(COLLECTION_PERSON).document();
-    await docRef.setData(person.toJson);
-    onUpdate(docRef.documentID);
+    docRef.setData(person.toJson);
+    return docRef.documentID;
   }
 
   Future<void> addPeople(List<Person> people) async {

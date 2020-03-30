@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_codelab_5/navigations/custom/navigation_custom_route.dart';
-import 'package:flutter_codelab_5/navigations/default/navigation_default_route.dart';
-import 'package:flutter_codelab_5/navigations/key/navigation_key_route.dart';
-import 'package:flutter_codelab_5/navigations/named/navigation_named_route.dart';
+import 'src/sample1_stateful.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +25,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flutter Navigation"),
+        title: Text("Best Practices for Rendering"),
       ),
       body: Center(
         child: Column(
@@ -37,19 +34,7 @@ class MyHomePage extends StatelessWidget {
           children: [
             RaisedButton(
               child: Text("Named Routes"),
-              onPressed: () => _onTap(context, NavigationNamedRoute()),
-            ),
-            RaisedButton(
-              child: Text("Default Routes"),
-              onPressed: () => _onTap(context, NavigationDefaultRoute()),
-            ),
-            RaisedButton(
-              child: Text("Custom Routes"),
-              onPressed: () => _onTap(context, NavigationCustomRoute()),
-            ),
-            RaisedButton(
-              child: Text("Navigation Key"),
-              onPressed: () => _onTap(context, NavigationKeyRoute()),
+              onPressed: () => _onTap(context, Sample1Stateful()),
             ),
           ],
         ),

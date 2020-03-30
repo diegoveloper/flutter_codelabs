@@ -1,7 +1,5 @@
-import 'dart:convert';
-
+import 'package:async_widgets/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class StatefulWidgetPage extends StatefulWidget {
   @override
@@ -68,11 +66,9 @@ class _StatefulWidgetPage2State extends State<StatefulWidgetPage2> {
   bool _loading = true;
 
   _load() async {
-    final response = await http
-        .get("http://www.json-generator.com/api/json/get/cfMiozZbQO?indent=2");
+    _list = await loadData();
     setState(() {
       _loading = false;
-      _list = json.decode(response.body);
     });
   }
 

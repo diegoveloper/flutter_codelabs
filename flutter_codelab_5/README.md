@@ -1,8 +1,8 @@
 # Flutter CodeLab 5
-## Let's explore the navigation in Flutter
+## Best's practices for rendering
 
 **Description:** 
-Some samples using different ways of Navigation in Flutter
+Some samples about best way to render widgets 
 
 **Contact me**
 

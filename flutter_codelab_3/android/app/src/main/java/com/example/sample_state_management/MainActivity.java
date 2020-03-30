@@ -1,4 +1,4 @@
-package com.example.sample_state_management;
+package com.example.state_management;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -1,13 +1,9 @@
-import 'dart:convert';
-
+import 'package:async_widgets/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class FutureWidgetPage extends StatelessWidget {
   Future<List> _load() async {
-    final response = await http
-        .get("http://www.json-generator.com/api/json/get/cfMiozZbQO?indent=2");
-    List list = json.decode(response.body);
+    List list = await loadData();
     return list;
   }
 

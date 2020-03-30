@@ -15,13 +15,8 @@ class HomeItem extends StatelessWidget {
         children: [
           CachedNetworkImage(
             imageUrl: lugar.imagen,
-            placeholder: SizedBox(
-              height: 190.0,
-              child: Center(
-                child: Icon(Icons.warning),
-              ),
-            ),
-            errorWidget: Icon(Icons.error),
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           Positioned(
             bottom: 0.0,
@@ -29,9 +24,12 @@ class HomeItem extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.all(5.0),
               color: Colors.black.withOpacity(0.5),
-              child: Text(
-                lugar.nombre,
-                style: TextStyle(color: Colors.white, fontSize: 22.0),
+              child: Material(
+                color: Colors.transparent,
+                child: Text(
+                  lugar.nombre,
+                  style: TextStyle(color: Colors.white, fontSize: 22.0),
+                ),
               ),
             ),
           ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'src/sample1_stateful.dart';
+import 'package:flutter_codelab_5/src/sample_changenotifier.dart';
+import 'package:flutter_codelab_5/src/sample_stream.dart';
+import 'package:flutter_codelab_5/src/sample_valuenotifier.dart';
+import 'src/sample_default.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,8 +36,20 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RaisedButton(
-              child: Text("Named Routes"),
-              onPressed: () => _onTap(context, Sample1Stateful()),
+              child: Text("Sample Default"),
+              onPressed: () => _onTap(context, SampleDefault()),
+            ),
+            RaisedButton(
+              child: Text("Sample ValueNotifier"),
+              onPressed: () => _onTap(context, SampleValueNotifier()),
+            ),
+            RaisedButton(
+              child: Text("Sample ChangeNotifier"),
+              onPressed: () => _onTap(context, SampleChangeNotifier()),
+            ),
+            RaisedButton(
+              child: Text("Sample Stream"),
+              onPressed: () => _onTap(context, SampleStream()),
             ),
           ],
         ),

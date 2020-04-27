@@ -1,91 +1,92 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
-class MyValues {
-  final Color color;
+class Holder {
   final double value;
+  final Color color;
 
-  MyValues(this.color, this.value);
+  Holder({this.value, this.color});
 }
 
-class MyStream {
-  final StreamController<MyValues> _controller = StreamController();
-  Stream<MyValues> get stream => _controller.stream;
+class StreamHolder {
+  final controller = StreamController<Holder>();
+  Stream<Holder> get streamValue => controller.stream;
 
-  void dispose() {
-    _controller.close();
+  void onUpdate(double val) {
+    final color = Colors.primaries[val.toInt() % Colors.primaries.length];
+    controller.add(Holder(color: color, value: val));
   }
 
-  void update(double val) {
-    _controller.add(
-        MyValues(Colors.primaries[val.toInt() % Colors.primaries.length], val));
+  void dispose() {
+    controller.close();
   }
 }
 
-class SampleStream extends StatefulWidget {
+class SampleStreams extends StatefulWidget {
   @override
-  _SampleStreamState createState() => _SampleStreamState();
+  _SampleStreamsState createState() => _SampleStreamsState();
 }
 
-class _SampleStreamState extends State<SampleStream> {
-  final myStream = MyStream();
+class _SampleStreamsState extends State<SampleStreams> {
+  final streamHolder = StreamHolder();
 
   @override
   void dispose() {
-    myStream.dispose();
+    streamHolder.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.8;
-    print('building...');
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Image.network(
-            'https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg',
-            fit: BoxFit.cover,
+    final size = MediaQuery.of(context).size;
+    print("build $this ${DateTime.now()}");
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: BackgroundWidget(),
           ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: Text('Stream'),
-          ),
-          body: StreamBuilder<MyValues>(
-            stream: myStream.stream,
-            initialData: MyValues(Colors.red, 0.0),
-            builder: (context, snapshot) {
-              final data = snapshot.data;
-              return Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
+          StreamBuilder<Holder>(
+              stream: streamHolder.streamValue,
+              initialData: Holder(color: Colors.primaries.first, value: 0.0),
+              builder: (context, snapshot) {
+                return Stack(
+                  children: [
+                    Center(
                       child: Container(
-                        width: data.value,
-                        color: data.color,
+                        color: snapshot.data.color,
+                        width: snapshot.data.value,
+                        height: snapshot.data.value,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: data.value,
-                      onChanged: (val) {
-                        myStream.update(val);
-                      },
-                      min: 0,
-                      max: width,
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: size.height * .1,
+                      height: size.height * .1,
+                      child: Slider(
+                        value: snapshot.data.value,
+                        onChanged: streamHolder.onUpdate,
+                        min: 0.0,
+                        max: size.width,
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ],
+                  ],
+                );
+              }),
+        ],
+      ),
+    );
+  }
+}
+
+class BackgroundWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    print("build $this ${DateTime.now()}");
+    return Image.network(
+      'https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg',
+      fit: BoxFit.cover,
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_codelab_5/src/sample_changenotifier.dart';
 import 'package:flutter_codelab_5/src/sample_stream.dart';
 import 'package:flutter_codelab_5/src/sample_valuenotifier.dart';
 import 'src/sample_default.dart';
+import 'src/sample_statefulbuilder.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +50,11 @@ class MyHomePage extends StatelessWidget {
             ),
             RaisedButton(
               child: Text("Sample Stream"),
-              onPressed: () => _onTap(context, SampleStream()),
+              onPressed: () => _onTap(context, SampleStreams()),
+            ),
+            RaisedButton(
+              child: Text("Sample StatefulBuilder"),
+              onPressed: () => _onTap(context, SampleStatefulBuilder()),
             ),
           ],
         ),

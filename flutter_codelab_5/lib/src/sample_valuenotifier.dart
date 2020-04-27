@@ -1,73 +1,63 @@
 import 'package:flutter/material.dart';
 
-class SampleValueNotifier extends StatefulWidget {
-  @override
-  _SampleValueNotifierState createState() => _SampleValueNotifierState();
-}
+class SampleValueNotifier extends StatelessWidget {
+  final _valueNotifier = ValueNotifier(0.0);
 
-class _SampleValueNotifierState extends State<SampleValueNotifier> {
-  final ValueNotifier<double> notifierValue = ValueNotifier(0.0);
-  final ValueNotifier<Color> notifierColor = ValueNotifier(Colors.red);
-
-  @override
-  void dispose() {
-    notifierValue.dispose();
-    notifierColor.dispose();
-    super.dispose();
+  void _onChange(double val) {
+    _valueNotifier.value = val;
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.8;
-    print('building...');
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Image.network(
-            'https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg',
-            fit: BoxFit.cover,
+    final size = MediaQuery.of(context).size;
+    print("build $this ${DateTime.now()}");
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: BackgroundWidget(),
           ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: Text('ValueNotifier'),
-          ),
-          body: ValueListenableBuilder(
-            builder: (context, value, child) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: ValueListenableBuilder(
-                        valueListenable: notifierColor,
-                        builder: (_, color, __) => Container(
-                          width: value,
-                          color: color,
-                        ),
+          ValueListenableBuilder<double>(
+              valueListenable: _valueNotifier,
+              builder: (context, snapshot, _) {
+                return Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        color: Colors.primaries[
+                            snapshot.toInt() % Colors.primaries.length],
+                        width: snapshot,
+                        height: snapshot,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Slider(
-                      value: value,
-                      onChanged: (val) {
-                        notifierValue.value = val;
-                        notifierColor.value = Colors
-                            .primaries[val.toInt() % Colors.primaries.length];
-                      },
-                      min: 0,
-                      max: width,
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: size.height * .1,
+                      height: size.height * .1,
+                      child: Slider(
+                        value: snapshot,
+                        onChanged: _onChange,
+                        min: 0.0,
+                        max: size.width,
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-            valueListenable: notifierValue,
-          ),
-        ),
-      ],
+                  ],
+                );
+              }),
+        ],
+      ),
+    );
+  }
+}
+
+class BackgroundWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    print("build $this ${DateTime.now()}");
+    return Image.network(
+      'https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg',
+      fit: BoxFit.cover,
     );
   }
 }

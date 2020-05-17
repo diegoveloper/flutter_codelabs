@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_codelab_4/data/person.dart';
 import 'package:connectivity/connectivity.dart';
 
@@ -23,8 +22,7 @@ class MyService {
   Future<void> addPeople(List<Person> people) async {
     final batch = Firestore.instance.batch();
     for (Person person in people) {
-      final docRef =
-          Firestore.instance.collection(COLLECTION_PERSON).document();
+      final docRef = Firestore.instance.collection(COLLECTION_PERSON).document();
       batch.setData(docRef, person.toJson);
     }
     await batch.commit();
@@ -37,10 +35,9 @@ class MyService {
     if (connectivityResult == ConnectivityResult.none) {
       source = Source.cache;
     }
-    final querySnapshot =
-        await Firestore.instance.collection(COLLECTION_PERSON).getDocuments(
-              source: source,
-            );
+    final querySnapshot = await Firestore.instance.collection(COLLECTION_PERSON).getDocuments(
+          source: source,
+        );
     final people = List<Person>();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
       for (DocumentSnapshot doc in querySnapshot.documents) {
@@ -55,10 +52,7 @@ class MyService {
   }
 
   Stream<List<Person>> getPeopleStream() {
-    return Firestore.instance
-        .collection(COLLECTION_PERSON)
-        .snapshots()
-        .map((querysnapshot) {
+    return Firestore.instance.collection(COLLECTION_PERSON).snapshots().map((querysnapshot) {
       final documents = querysnapshot.documents;
       List<Person> people = List();
       for (DocumentSnapshot doc in documents) {
@@ -70,16 +64,11 @@ class MyService {
     });
   }
 
-  Future<List<Person>> getPeoplePaginated(int paginationSize,
-      {String startFrom}) async {
-    Query query =
-        Firestore.instance.collection(COLLECTION_PERSON).limit(paginationSize);
+  Future<List<Person>> getPeoplePaginated(int paginationSize, {String startFrom}) async {
+    Query query = Firestore.instance.collection(COLLECTION_PERSON).limit(paginationSize);
 
     if (startFrom != null) {
-      final docRef = await Firestore.instance
-          .collection(COLLECTION_PERSON)
-          .document(startFrom)
-          .get();
+      final docRef = await Firestore.instance.collection(COLLECTION_PERSON).document(startFrom).get();
       if (docRef != null && docRef.exists) {
         query = query.startAfterDocument(docRef);
       }

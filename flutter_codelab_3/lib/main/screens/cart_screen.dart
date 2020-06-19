@@ -1,14 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:state_management/main/model/data.dart';
+import 'package:state_management/main/screens/thanks_screen.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   final List<Item> cartItems;
 
   const CartScreen({Key key, this.cartItems}) : super(key: key);
 
-  double get cartTotal => cartItems.isNotEmpty
-      ? cartItems.map((val) => val.price).reduce((val1, val2) => val1 + val2)
-      : 0.0;
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  bool loading = false;
+
+  double get cartTotal =>
+      widget.cartItems.isNotEmpty ? widget.cartItems.map((val) => val.price).reduce((val1, val2) => val1 + val2) : 0.0;
+
+  void _checkout() async {
+    setState(() {
+      loading = true;
+    });
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      loading = false;
+    });
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => ThanksScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +51,7 @@ class CartScreen extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.all(15),
               children: [
-                for (var item in cartItems)
+                for (var item in widget.cartItems)
                   Row(
                     children: [
                       Expanded(
@@ -50,9 +72,22 @@ class CartScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              "Total : $cartTotal",
-              style: Theme.of(context).textTheme.headline2,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Total : $cartTotal",
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                if (loading)
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                else if (widget.cartItems.isNotEmpty)
+                  RaisedButton(
+                    child: Text("Checkout"),
+                    onPressed: _checkout,
+                  )
+              ],
             ),
           ),
         ],

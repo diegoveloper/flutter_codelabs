@@ -18,13 +18,15 @@ const _itemNames = [
   'Currying',
 ];
 
-List<Item> items = List.generate(
+List<Item> _items = List.generate(
   _itemNames.length,
   (index) => Item(
     id: index,
     name: _itemNames[index],
   ),
 );
+
+List<Item> get allItems => List.unmodifiable(_items);
 
 @immutable
 class Item {

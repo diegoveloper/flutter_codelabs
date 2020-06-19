@@ -12,7 +12,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             Text(
               "Welcome",
-              style: Theme.of(context).textTheme.display1.copyWith(
+              style: Theme.of(context).textTheme.headline4.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).accentColor,
                   ),

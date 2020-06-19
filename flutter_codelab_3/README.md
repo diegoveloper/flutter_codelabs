@@ -1,8 +1,12 @@
 # Flutter CodeLab 3
-## State Management with Provider
+## State Management with Provider & Flutter Bloc
 
 **Description:** 
-Sample of an app before and after apply state management pattern (provider)
+Sample of an app using state management.
+
+* `main` folder contains the sample without using any external package.
+* `provider` folder containts the sample using `provider` package.
+* `flutter_bloc` folder contains the sample using `flutter_bloc` package.
 
 **Contact me**
 

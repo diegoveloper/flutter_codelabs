@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:state_management/before/model/data.dart';
+import 'package:state_management/main/model/data.dart';
 
 class CartScreen extends StatelessWidget {
   final List<Item> cartItems;
@@ -16,7 +16,7 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Cart",
-          style: Theme.of(context).textTheme.display1.copyWith(
+          style: Theme.of(context).textTheme.headline4.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).accentColor,
               ),
@@ -35,13 +35,13 @@ class CartScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           '* ${item.name}',
-                          style: Theme.of(context).textTheme.title,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       Expanded(
                         child: Text(
                           '${item.price}',
-                          style: Theme.of(context).textTheme.title,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                     ],
@@ -52,7 +52,7 @@ class CartScreen extends StatelessWidget {
           Expanded(
             child: Text(
               "Total : $cartTotal",
-              style: Theme.of(context).textTheme.display3,
+              style: Theme.of(context).textTheme.headline2,
             ),
           ),
         ],

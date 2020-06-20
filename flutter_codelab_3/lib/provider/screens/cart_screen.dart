@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:state_management/common/data.dart';
+import '../cart_provider.dart';
 import 'thanks_screen.dart';
 
-class CartScreen extends StatefulWidget {
-  final List<Item> cartItems;
+class CartScreen extends StatelessWidget {
+  CartScreen._();
 
-  const CartScreen({Key key, this.cartItems}) : super(key: key);
+  static ChangeNotifierProvider init(List<Item> cartItems) => ChangeNotifierProvider<CartProvider>(
+        create: (_) => CartProvider(cartItems),
+        builder: (_, __) => CartScreen._(),
+      );
 
-  @override
-  _CartScreenState createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  bool loading = false;
-
-  double get cartTotal =>
-      widget.cartItems.isNotEmpty ? widget.cartItems.map((val) => val.price).reduce((val1, val2) => val1 + val2) : 0.0;
-
-  void _checkout() async {
-    setState(() {
-      loading = true;
-    });
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      loading = false;
-    });
+  void checkoutMyCart(BuildContext context) async {
+    final provider = context.read<CartProvider>();
+    await provider.checkout();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => ThanksScreen(),
@@ -34,6 +24,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<CartProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -51,7 +42,7 @@ class _CartScreenState extends State<CartScreen> {
             child: ListView(
               padding: EdgeInsets.all(15),
               children: [
-                for (var item in widget.cartItems)
+                for (var item in provider.cartItems)
                   Row(
                     children: [
                       Expanded(
@@ -75,17 +66,19 @@ class _CartScreenState extends State<CartScreen> {
             child: Column(
               children: <Widget>[
                 Text(
-                  "Total : $cartTotal",
+                  "Total : ${provider.cartTotal}",
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                if (loading)
+                if (provider.loading)
                   Center(
                     child: CircularProgressIndicator(),
                   )
-                else if (widget.cartItems.isNotEmpty)
+                else if (provider.cartItems.isNotEmpty)
                   RaisedButton(
                     child: Text("Checkout"),
-                    onPressed: _checkout,
+                    onPressed: () {
+                      checkoutMyCart(context);
+                    },
                   )
               ],
             ),

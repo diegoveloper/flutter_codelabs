@@ -1,34 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:state_management/common/data.dart';
+import 'package:state_management/provider/catalog_provider.dart';
 import 'cart_screen.dart';
+import 'package:provider/provider.dart';
 
-class CatalogActionButtons extends StatefulWidget {
-  final List<Item> cartItems;
-  final VoidCallback onDelete;
-
-  const CatalogActionButtons({
-    Key key,
-    this.cartItems,
-    this.onDelete,
-  }) : super(key: key);
-
-  @override
-  _CatalogActionButtonsState createState() => _CatalogActionButtonsState();
-}
-
-class _CatalogActionButtonsState extends State<CatalogActionButtons> {
+class CatalogActionButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<CatalogProvider>(context, listen: false);
     return Row(
       children: [
-        widget.cartItems.isNotEmpty
+        provider.cartItems.isNotEmpty
             ? IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  setState(() {
-                    widget.cartItems.clear();
-                  });
-                  widget.onDelete();
+                  provider.deleteAll();
                 },
               )
             : const SizedBox.shrink(),
@@ -37,7 +22,7 @@ class _CatalogActionButtonsState extends State<CatalogActionButtons> {
             IconButton(
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
-                final page = CartScreen(cartItems: widget.cartItems);
+                final page = CartScreen.init(provider.cartItems);
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => page),
                 );
@@ -46,12 +31,12 @@ class _CatalogActionButtonsState extends State<CatalogActionButtons> {
             Positioned(
               right: 5.0,
               top: 0.0,
-              child: widget.cartItems.isNotEmpty
+              child: provider.cartItems.isNotEmpty
                   ? CircleAvatar(
                       maxRadius: 10,
                       backgroundColor: Colors.red,
                       child: Text(
-                        widget.cartItems.length.toString(),
+                        provider.cartItems.length.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,

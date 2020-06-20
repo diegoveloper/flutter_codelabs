@@ -19,7 +19,7 @@ class ThanksScreen extends StatelessWidget {
             RaisedButton(
               child: Text("Go Back"),
               onPressed: () {
-                final page = CatalogScreen();
+                final page = CatalogScreen.init();
                 Navigator.pop(context);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (_) => page),

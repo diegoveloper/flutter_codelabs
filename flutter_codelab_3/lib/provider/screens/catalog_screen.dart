@@ -1,46 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:state_management/common/data.dart' show Item, allItems;
+import 'package:provider/provider.dart';
+import 'package:state_management/common/data.dart' show Item;
+import '../catalog_provider.dart';
 import 'catalog_action_buttons.dart';
 
-class CatalogScreen extends StatefulWidget {
-  @override
-  _CatalogScreenState createState() => _CatalogScreenState();
-}
+class CatalogScreen extends StatelessWidget {
+  CatalogScreen._();
 
-class _CatalogScreenState extends State<CatalogScreen> {
-  final List<Item> cartItems = [];
-  List<Item> allMyItems = [];
-  bool loading = false;
-
-  void _loadData() async {
-    setState(() {
-      loading = true;
-    });
-    await Future.delayed(const Duration(seconds: 3));
-    allMyItems.clear();
-    allMyItems.addAll(allItems);
-    setState(() {
-      loading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _loadData();
-    super.initState();
-  }
+  static ChangeNotifierProvider init() => ChangeNotifierProvider<CatalogProvider>(
+        create: (_) => CatalogProvider()..loadData(),
+        builder: (_, __) => CatalogScreen._(),
+      );
 
   @override
   Widget build(BuildContext context) {
+    //final provider = Provider.of<CatalogProvider>(context);
+    final provider = context.watch<CatalogProvider>();
     return Scaffold(
       appBar: AppBar(
         actions: [
-          CatalogActionButtons(
-            cartItems: cartItems,
-            onDelete: () {
-              setState(() {});
-            },
-          ),
+          CatalogActionButtons(),
         ],
         title: Text(
           "Catalog",
@@ -50,23 +29,19 @@ class _CatalogScreenState extends State<CatalogScreen> {
               ),
         ),
       ),
-      body: loading
+      body: provider.loading
           ? Center(
               child: CircularProgressIndicator(),
             )
           : ListView.separated(
-              itemCount: allMyItems.length,
+              itemCount: provider.allMyItems.length,
               itemBuilder: (_, index) => CatalogItem(
-                item: allMyItems[index],
-                wasAdded: cartItems.contains(
-                  allMyItems[index],
+                item: provider.allMyItems[index],
+                wasAdded: provider.cartItems.contains(
+                  provider.allMyItems[index],
                 ),
                 onTap: () {
-                  setState(() {
-                    cartItems.add(
-                      allMyItems[index],
-                    );
-                  });
+                  provider.addItem(provider.allMyItems[index]);
                 },
               ),
               separatorBuilder: (_, index) => Divider(),

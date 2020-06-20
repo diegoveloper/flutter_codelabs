@@ -13,7 +13,7 @@ class CatalogActionButtons extends StatelessWidget {
             ? IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  catalogBloc.add(MyCatalogEventDelete());
+                  catalogBloc.add(MyCatalogDeleteEvent());
                 },
               )
             : const SizedBox.shrink(),

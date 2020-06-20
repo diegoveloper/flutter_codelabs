@@ -8,16 +8,16 @@ class CatalogScreen extends StatelessWidget {
   CatalogScreen._();
 
   static BlocProvider init() => BlocProvider<CatalogBloc>(
-        create: (_) => CatalogBloc()..add(MyCatalogEventLoad()),
+        create: (_) => CatalogBloc()..add(MyCatalogLoadEvent()),
         child: CatalogScreen._(),
       );
 
   @override
   Widget build(BuildContext context) {
     final CatalogBloc catalogBloc = context.bloc<CatalogBloc>();
-    return BlocBuilder<CatalogBloc, List<Item>>(builder: (
+    return BlocBuilder<CatalogBloc, MyCatalogState>(builder: (
       context,
-      list,
+      value,
     ) {
       return Scaffold(
         appBar: AppBar(
@@ -32,7 +32,7 @@ class CatalogScreen extends StatelessWidget {
                 ),
           ),
         ),
-        body: catalogBloc.loading
+        body: value is MyCatalogLoadingState
             ? Center(
                 child: CircularProgressIndicator(),
               )
@@ -45,7 +45,7 @@ class CatalogScreen extends StatelessWidget {
                   ),
                   onTap: () {
                     catalogBloc.add(
-                      MyCatalogEventAdd(
+                      MyCatalogAddEvent(
                         catalogBloc.allMyItems[index],
                       ),
                     );

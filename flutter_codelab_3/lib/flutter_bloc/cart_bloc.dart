@@ -1,10 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:state_management/common/data.dart';
 
-enum CartAction { checkout }
+//states
+abstract class CartState {}
 
-class CartBloc extends Bloc<CartAction, int> {
-  bool loading = false;
+class CartEmptyState extends CartState {}
+
+class CartLoadingState extends CartState {}
+
+class CartPushState extends CartState {}
+
+//events
+abstract class CartEvent {}
+
+class CartCheckoutEvent extends CartEvent {}
+
+class CartBloc extends Bloc<CartEvent, CartState> {
   final List<Item> cartItems;
   double get cartTotal =>
       cartItems.isNotEmpty ? cartItems.map((val) => val.price).reduce((val1, val2) => val1 + val2) : 0.0;
@@ -12,18 +23,14 @@ class CartBloc extends Bloc<CartAction, int> {
   CartBloc(this.cartItems);
 
   @override
-  int get initialState => 0;
+  CartState get initialState => CartEmptyState();
 
   @override
-  Stream<int> mapEventToState(CartAction event) async* {
-    if (event == CartAction.checkout) {
-      loading = true;
-      yield 1;
-
+  Stream<CartState> mapEventToState(CartEvent event) async* {
+    if (event is CartCheckoutEvent) {
+      yield CartLoadingState();
       await Future.delayed(const Duration(seconds: 2));
-
-      loading = false;
-      yield 2;
+      yield CartPushState();
     }
   }
 }

@@ -14,86 +14,88 @@ class CartScreen extends StatelessWidget {
 
   void checkoutMyCart(BuildContext context) async {
     final CartBloc cartBloc = context.bloc<CartBloc>();
-    cartBloc.add(CartAction.checkout);
-  }
-
-  void goToThanks(BuildContext context) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => ThanksScreen(),
-      ),
-    );
+    cartBloc.add(CartCheckoutEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     final CartBloc cartBloc = context.bloc<CartBloc>();
-    return BlocBuilder<CartBloc, int>(builder: (context, value) {
-      if (value == 2) {
-        goToThanks(context);
-      }
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Cart",
-            style: Theme.of(context).textTheme.headline4.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).accentColor,
-                ),
-          ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: ListView(
-                padding: EdgeInsets.all(15),
-                children: [
-                  for (var item in cartBloc.cartItems)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '* ${item.name}',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            '${item.price}',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Cart",
+          style: Theme.of(context).textTheme.headline4.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).accentColor,
               ),
-            ),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Total : ${cartBloc.cartTotal}",
-                    style: Theme.of(context).textTheme.headline2,
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: ListView(
+              padding: EdgeInsets.all(15),
+              children: [
+                for (var item in cartBloc.cartItems)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '* ${item.name}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          '${item.price}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                    ],
                   ),
-                  if (cartBloc.loading)
-                    Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  else if (cartBloc.cartItems.isNotEmpty)
-                    RaisedButton(
-                      child: Text("Checkout"),
-                      onPressed: () {
-                        checkoutMyCart(context);
-                      },
-                    )
-                ],
+              ],
+            ),
+          ),
+          Expanded(
+            child: BlocListener<CartBloc, CartState>(
+              bloc: cartBloc,
+              listener: (context, state) {
+                if (state is CartPushState) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => ThanksScreen(),
+                    ),
+                  );
+                }
+              },
+              child: BlocBuilder<CartBloc, CartState>(
+                builder: (context, state) {
+                  return Column(
+                    children: <Widget>[
+                      Text(
+                        "Total : ${cartBloc.cartTotal}",
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      if (state is CartLoadingState)
+                        Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      else if (cartBloc.cartItems.isNotEmpty)
+                        RaisedButton(
+                          child: Text("Checkout"),
+                          onPressed: () {
+                            checkoutMyCart(context);
+                          },
+                        )
+                    ],
+                  );
+                },
               ),
             ),
-          ],
-        ),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }
